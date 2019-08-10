@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    var data = [
+        { value: 335, name: '直接访问', color: "rgb(213, 58, 53)" },
+        { value: 310, name: '邮件营销', color: "rgb(51, 75, 92)" },
+        { value: 234, name: '联盟广告', color: "rgb(106, 176, 184)" },
+        { value: 135, name: '视频广告', color: "rgb(233, 143, 111)" },
+        { value: 1548, name: '搜索引擎', color: "rgb(145, 199, 174)" }
+    ]
+    // 创建画布
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+    var W_H = 1000;
+    canvas.width = W_H;
+    canvas.height = W_H;
+    canvas.style.border = '1px solid #ccc';
+    document.body.appendChild(canvas);
+
+    // 提前赋值，方便调用
+    var deg = Math.PI / 180;
+    // value值
+    var valueArr = [];
+    // 颜色
+    var colorArr = [];
+    // 文本
+    var nameArr = [];
+    // 取数据
+    for (var i = 0; i < data.length; i++) {
+        valueArr.push(JSON.parse(JSON.stringify(data[i].value)));
+        nameArr.push(JSON.parse(JSON.stringify(data[i].name)));
+        colorArr.push(JSON.parse(JSON.stringify(data[i].color)));
+    }
+
+    // 求和
+    var numArr = valueArr.reduce(function (pre, cur) {
+        return pre + cur;
+    });
+
+    // 比例
+    var preDeg = 2 * Math.PI / numArr;
+
+
+    // 双圆
+    pagCanvas()
+    function pagCanvas() {
+        ctx.save();
+        var starts = 0;
+        for (var i = 0; i < valueArr.length; i++) {
+            var ends = valueArr[i] * preDeg;
+            ctx.beginPath();
+            ctx.fillStyle = colorArr[i];
+            ctx.moveTo(350, 350);
+            ctx.arc(350, 350, 60, starts, starts + ends, false);
+            ctx.closePath();
+            ctx.fill();
+            starts += ends;
+        }
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(350, 350, 40, 0, 2 * Math.PI, true);
+        ctx.fillStyle = '#fff';
+        ctx.fill();
+        ctx.closePath();
+        ctx.restore();
+    }
+
+    // j矩形
+    function yuan(obj, ctx, color1) {
+        ctx.beginPath();
+        ctx.arc(obj.x + obj.r, obj.y + obj.r, obj.r, Math.PI, 3 / 2 * Math.PI);
+        ctx.arc(obj.x + obj.w - obj.r, obj.y + obj.r, obj.r, 3 / 2 * Math.PI, 2 * Math.PI);
+        ctx.arc(obj.x + obj.w - obj.r, obj.y + obj.h - obj.r, obj.r, 0, 1 / 2 * Math.PI);
+        ctx.arc(obj.x + obj.r, obj.y + obj.h - obj.r, obj.r, 1 / 2 * Math.PI, Math.PI);
+        ctx.fillStyle = color1;
+        ctx.fill();
+        ctx.closePath();
+    }
+    yuan({ x: 10, y: 20, r: 5, w: 60, h: 25 }, ctx, colorArr[0]);
+    yuan({ x: 10, y: 60, r: 5, w: 60, h: 25 }, ctx, colorArr[1]);
+    yuan({ x: 10, y: 100, r: 5, w: 60, h: 25 }, ctx, colorArr[2]);
+    yuan({ x: 10, y: 140, r: 5, w: 60, h: 25 }, ctx, colorArr[3]);
+    yuan({ x: 10, y: 180, r: 5, w: 60, h: 25 }, ctx, colorArr[4]);
+
+
+    // 封装字体
+    function ziti(text, ctx, color2, obj) {
+        ctx.font = '18px 微软雅黑';
+        ctx.textBaseline = 'top';
+        ctx.fillStyle = color2;
+        ctx.fillText(text, obj.w + 10, obj.h);
+    }
+    ziti(nameArr[0], ctx, colorArr[0], { w: 100, h: 25 })
+    ziti(nameArr[1], ctx, colorArr[1], { w: 100, h: 65 })
+    ziti(nameArr[2], ctx, colorArr[2], { w: 100, h: 105 })
+    ziti(nameArr[3], ctx, colorArr[3], { w: 100, h: 145 })
+    ziti(nameArr[4], ctx, colorArr[4], { w: 100, h: 190 })
+
+
+ 
+    // 脸
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(600, 320, 120, 0, 2 * Math.PI, false);
+    ctx.fillStyle = '#FFFF00';
+    ctx.fill();
+    ctx.closePath();
+    ctx.restore();
+
+    // 眼睛
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(660, 270, 15, 0, 2 * Math.PI, false);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+    ctx.closePath();
+    ctx.restore();
+
+    // 眼珠子
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(665, 275, 7, 0, 2 * Math.PI, false);
+    ctx.fillStyle = '#000';
+    ctx.fill();
+    ctx.closePath();
+    ctx.restore();
+
+    // 嘴巴
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(600, 340);
+    ctx.lineTo(750, 310);
+    ctx.lineTo(720, 340);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+    ctx.closePath();
+    ctx.restore();
+
+
+    
+    arr();
+    function arr() {
+        // 尴尬
+        ctx.save();
+        ctx.beginPath();
+        ctx.fillRect(570, 200, 4, 30);
+        ctx.fillStyle = '#333';
+        ctx.fill();
+        ctx.closePath();
+        ctx.restore();
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.fillRect(580, 200, 4, 30);
+        ctx.fillStyle = '#333';
+        ctx.fill();
+        ctx.closePath();
+        ctx.restore();
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.fillRect(590, 200, 4, 30);
+        ctx.fillStyle = '#333';
+        ctx.fill();
+        ctx.closePath();
+        ctx.restore();
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.fillRect(600, 200, 4, 30);
+        ctx.fillStyle = '#333';
+        ctx.fill();
+        ctx.closePath();
+        ctx.restore();
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.fillRect(610, 200, 4, 30);
+        ctx.fillStyle = '#333';
+        ctx.fill();
+        ctx.closePath();
+        ctx.restore();
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.fillRect(620, 200, 4, 30);
+        ctx.fillStyle = '#333';
+        ctx.fill();
+        ctx.closePath();
+        ctx.restore();
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.fillRect(630, 200, 4, 30);
+        ctx.fillStyle = '#red';
+        ctx.fill();
+        ctx.closePath();
+        ctx.restore();
+    }
+
+</script>
+
+</html>
